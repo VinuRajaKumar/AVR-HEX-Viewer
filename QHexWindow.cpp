@@ -8,6 +8,7 @@
 
 QHexWindow::QHexWindow(QWidget *parent) : QWidget(parent),
                                            isMousePressed(false),
+                                           isSearchBoxShown(false),
                                            mIntelHexFile(new QFile)
 {
     setWindowFlags(Qt::FramelessWindowHint);
@@ -46,6 +47,15 @@ QHexWindow::QHexWindow(QWidget *parent) : QWidget(parent),
         padding                     : 10px 10px 10px 10px;                  \
         margin                      : 0px 0px 0px 0px;                      \
     }                                                                       \
+    QLineEdit{                                                              \
+    background-color            : rgb(16, 29, 37);                          \
+    selection-background-color  : rgb(0, 176, 156);                         \
+    color                       : rgb(0, 176, 156);                         \
+    border                      : 1px solid rgb(0, 176, 156);                \
+    border-radius               : 0px;                                      \
+    padding                     : 0px 10px 0px 10px;                        \
+    margin                      : 0px 0px 0px 0px;                          \
+}                                                                           \
     QScrollBar:vertical {                                                   \
         border: 0px solid grey;                                             \
         background: rgb(15, 15, 15);                                        \
@@ -213,12 +223,12 @@ QHexWindow::QHexWindow(QWidget *parent) : QWidget(parent),
 
     mButtonMinimize = new QPushButton;
     mButtonMinimize->setFlat(true);
-    mButtonMinimize->setIcon(style()->standardIcon(QStyle::QStyle::SP_TitleBarMinButton));
+    mButtonMinimize->setIcon(style()->standardIcon(QStyle::SP_TitleBarMinButton));
     mButtonMinimize->setFixedSize(24,24);
     mButtonMinimize->setToolTip(tr("Minimize"));
 
     mButtonClose = new QPushButton;
-    mButtonClose->setIcon(style()->standardIcon(QStyle::QStyle::SP_TitleBarCloseButton));
+    mButtonClose->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton));
     mButtonClose->setFixedSize(24,24);
     mButtonClose->setToolTip(tr("Close"));
 
@@ -238,6 +248,31 @@ QHexWindow::QHexWindow(QWidget *parent) : QWidget(parent),
     mRefreshButton->setStyleSheet("QPushButton{color : rgb(0, 176, 156); background-color : rgb(35,45,54);}"
                                   "QPushButton:pressed{color : rgb(35,45,54); background-color : rgb(0, 176, 156);}");
     mRefreshButton->hide();
+
+    mSearchBox = new QLineEdit;
+    mSearchBox->setFixedSize(200,30);
+    mSearchBox->setPlaceholderText("Enter keyword here!");
+
+    mSearchResult = new QLineEdit("No keyword to search!");
+    mSearchResult->setFixedHeight(30);
+    mSearchResult->setReadOnly(true);
+    mSearchResult->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+    mSearchResult->setStyleSheet("QLineEdit{color : rgb(159, 162, 167); background-color : rgb(35,45,54); border : none;}");
+
+    mSearchNext = new QPushButton("SEARCH");
+    mSearchNext->setObjectName("mSearchNext");
+    mSearchNext->setToolTip(tr("Next"));
+    mSearchNext->setFlat(true);
+    mSearchNext->setFixedSize(80,30);
+    mSearchNext->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+
+    mSearchClose = new QPushButton;
+    mSearchClose->setIcon(style()->standardIcon(QStyle::QStyle::SP_TitleBarCloseButton));
+    mSearchClose->setToolTip(tr("Close search box"));
+    mSearchClose->setObjectName("mSearchClose");
+    mSearchClose->setFlat(true);
+    mSearchClose->setFixedSize(24,24);
+    mSearchClose->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
 
     mRightScrollBar = new QScrollBar(Qt::Vertical);
 
@@ -260,14 +295,26 @@ QHexWindow::QHexWindow(QWidget *parent) : QWidget(parent),
     h2Layout->addWidget(mRightScrollBar);
     h2Layout->addItem(new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Expanding));
 
-
     QHBoxLayout *h3Layout = new QHBoxLayout;
     h3Layout->setSpacing(0);
     h3Layout->setContentsMargins(0,0,0,0);
     h3Layout->addWidget(mFileStatistics,1);
-    h3Layout->addWidget(mSelectButton,0);
     h3Layout->addWidget(mRefreshButton,0);
+    h3Layout->addWidget(mSelectButton,0);
     h3Layout->addItem(new QSpacerItem(0,0,QSizePolicy::Expanding,QSizePolicy::Fixed));
+
+    QHBoxLayout *h4Layout = new QHBoxLayout;
+    h4Layout->setSpacing(0);
+    h4Layout->setContentsMargins(0,0,0,0);
+    h4Layout->addWidget(mSearchBox,1);
+    h4Layout->addWidget(mSearchNext,0);
+    h4Layout->addWidget(mSearchResult,0);
+    h4Layout->addItem(new QSpacerItem(3,0,QSizePolicy::Fixed,QSizePolicy::Fixed));
+    h4Layout->addWidget(mSearchClose,0);
+    h4Layout->addItem(new QSpacerItem(3,0,QSizePolicy::Fixed,QSizePolicy::Fixed));
+    mSearchBar = new QWidget(this);
+    mSearchBar->setLayout(h4Layout);
+    mSearchBar->hide();
 
 
     QVBoxLayout *v1Layout = new QVBoxLayout;
@@ -278,6 +325,7 @@ QHexWindow::QHexWindow(QWidget *parent) : QWidget(parent),
     v1Layout->addWidget(mAddressAreaTop);
     v1Layout->addLayout(h2Layout);
     v1Layout->addLayout(h3Layout);
+    v1Layout->addWidget(mSearchBar);
 
     QHBoxLayout *finalLayout = new QHBoxLayout;
     finalLayout->setContentsMargins(0,0,0,0);
@@ -292,12 +340,20 @@ QHexWindow::QHexWindow(QWidget *parent) : QWidget(parent),
 
     connect(mButtonMinimize, &QToolButton::clicked, this, &QHexWindow::minimize);
     connect(mButtonClose, &QToolButton::clicked, this, &QHexWindow::close);
+    connect(mSearchNext,SIGNAL(clicked()),this,SLOT(highlightString()));
 
     connect(mSelectButton,SIGNAL(clicked()),this,SLOT(selectHexFile()));
     connect(mRefreshButton,SIGNAL(clicked()),this,SLOT(refreshDisplay()));
-    connect(mRightScrollBar,&QScrollBar::valueChanged,mAddressAreaLeft->verticalScrollBar(),&QScrollBar::setValue);
-    connect(mRightScrollBar,&QScrollBar::valueChanged,mHexArea->verticalScrollBar(),&QScrollBar::setValue);
-    connect(mRightScrollBar,SIGNAL(valueChanged(int)),mASCIIArea->verticalScrollBar(),SLOT(setValue(int)));
+
+    connect(mRightScrollBar,&QScrollBar::valueChanged,this,&QHexWindow::handleScroll);
+    connect(mAddressAreaLeft->verticalScrollBar(),&QScrollBar::valueChanged,this,&QHexWindow::handleScroll);
+    connect(mHexArea->verticalScrollBar(),&QScrollBar::valueChanged,this,&QHexWindow::handleScroll);
+    connect(mASCIIArea->verticalScrollBar(),&QScrollBar::valueChanged,this,&QHexWindow::handleScroll);
+    QAction *findAction = new QAction(this);
+    findAction->setShortcut(Qt::CTRL|Qt::Key_F);
+    this->addAction(findAction);
+    connect(findAction,SIGNAL(triggered()),this,SLOT(showSearchBox()));
+    connect(mSearchClose,SIGNAL(pressed()),this,SLOT(showSearchBox()));
 }
 
 
@@ -500,6 +556,8 @@ void QHexWindow::selectHexFile()
         processFile(mHexFilename);
         displayHex();
         listErrors();
+        mSearchBar->hide();
+        isSearchBoxShown=false;
     }
 }
 
@@ -685,6 +743,78 @@ void QHexWindow::close()
     //QObject::connect(quitButton, &QPushButton::clicked, qApp, &QCoreApplication::quit);
 }
 
+void QHexWindow::showSearchBox()
+{
+    if(!isSearchBoxShown)
+    {
+        mSearchBar->show();
+    }
+    else
+    {
+        mSearchBar->hide();
+    }
+    isSearchBoxShown = !isSearchBoxShown;
+    mSearchBox->setFocus();
+}
+
+void QHexWindow::highlightString()
+{
+    QString searchString = mSearchBox->text();
+    QTextDocument *document = mASCIIArea->document();
+
+    bool found = false;
+    int noOfResults=0;
+
+    // undo previous change (if any)
+    document->undo();
+
+    if (searchString.isEmpty())
+    {
+        mSearchResult->setText("No keyword to search!");
+    }
+    else
+    {
+        QTextCursor highlightCursor(document);
+        QTextCursor cursor(document);
+
+        cursor.beginEditBlock();
+        QTextCharFormat plainFormat(highlightCursor.charFormat());
+        QTextCharFormat colorFormat;
+        colorFormat.setFontWeight(QFont::Bold);
+        colorFormat.setFontLetterSpacing(110);
+        colorFormat.setForeground(QBrush(QColor(190, 190, 190)));
+        colorFormat.setBackground(QBrush(QColor(190, 10, 100)));
+
+        QString documentText = document->toRawText();
+
+        qDebug() << "Text Length Before : " << documentText.length();
+        documentText.remove(QChar('\n'));
+        qDebug() << "Text Length After : " << documentText.length();
+
+        while (!highlightCursor.isNull() && !highlightCursor.atEnd())
+        {
+            highlightCursor = document->find(searchString, highlightCursor);
+
+            if (!highlightCursor.isNull())
+            {
+                found = true;
+                noOfResults = noOfResults + 1;
+                highlightCursor.movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
+                highlightCursor.mergeCharFormat(colorFormat);
+            }
+        }
+        cursor.endEditBlock();
+        if (found == false)
+        {
+            mSearchResult->setText(tr("Word Not Found"));
+        }
+        else
+        {
+            mSearchResult->setText(QString("%1 result(s) found.").arg(noOfResults));
+        }
+    }
+}
+
 void QHexWindow::mousePressEvent(QMouseEvent *event)
 {
     QLabel *child = static_cast<QLabel*>(childAt(event->pos()));
@@ -694,6 +824,61 @@ void QHexWindow::mousePressEvent(QMouseEvent *event)
     }
     isMousePressed = true;
     mStartPos = event->pos();
+}
+
+void QHexWindow::handleScroll(int i)
+{
+    QScrollBar *sender = qobject_cast<QScrollBar *>(this->sender());
+    if(sender == mAddressAreaLeft->verticalScrollBar())
+    {
+        mHexArea->verticalScrollBar()->blockSignals(true);
+        mASCIIArea->verticalScrollBar()->blockSignals(true);
+        mRightScrollBar->blockSignals(true);
+        mHexArea->verticalScrollBar()->setValue(i);
+        mASCIIArea->verticalScrollBar()->setValue(i);
+        mRightScrollBar->setValue(i);
+        mHexArea->verticalScrollBar()->blockSignals(false);
+        mASCIIArea->verticalScrollBar()->blockSignals(false);
+        mRightScrollBar->blockSignals(false);
+
+    }
+    else if(sender == mHexArea->verticalScrollBar())
+    {
+        mAddressAreaLeft->verticalScrollBar()->blockSignals(true);
+        mASCIIArea->verticalScrollBar()->blockSignals(true);
+        mRightScrollBar->blockSignals(true);
+        mAddressAreaLeft->verticalScrollBar()->setValue(i);
+        mASCIIArea->verticalScrollBar()->setValue(i);
+        mRightScrollBar->setValue(i);
+        mAddressAreaLeft->verticalScrollBar()->blockSignals(false);
+        mASCIIArea->verticalScrollBar()->blockSignals(false);
+        mRightScrollBar->blockSignals(false);
+    }
+    else if(sender == mASCIIArea->verticalScrollBar())
+    {
+        mAddressAreaLeft->verticalScrollBar()->blockSignals(true);
+        mHexArea->verticalScrollBar()->blockSignals(true);
+        mRightScrollBar->blockSignals(true);
+        mAddressAreaLeft->verticalScrollBar()->setValue(i);
+        mHexArea->verticalScrollBar()->setValue(i);
+        mRightScrollBar->setValue(i);
+        mAddressAreaLeft->verticalScrollBar()->blockSignals(false);
+        mHexArea->verticalScrollBar()->blockSignals(false);
+        mRightScrollBar->blockSignals(false);
+    }
+    else if(sender == mRightScrollBar)
+    {
+        mAddressAreaLeft->verticalScrollBar()->blockSignals(true);
+        mHexArea->verticalScrollBar()->blockSignals(true);
+        mASCIIArea->verticalScrollBar()->blockSignals(true);
+        mAddressAreaLeft->verticalScrollBar()->setValue(i);
+        mHexArea->verticalScrollBar()->setValue(i);
+        mASCIIArea->verticalScrollBar()->setValue(i);
+        mAddressAreaLeft->verticalScrollBar()->blockSignals(false);
+        mHexArea->verticalScrollBar()->blockSignals(false);
+        mASCIIArea->verticalScrollBar()->blockSignals(false);
+    }
+    update();
 }
 
 void QHexWindow::mouseMoveEvent(QMouseEvent *event)

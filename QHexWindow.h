@@ -23,6 +23,8 @@
 #include <QToolButton>
 #include <QMouseEvent>
 #include <QTimer>
+#include <QLineEdit>
+#include <QAction>
 
 class QHexWindow : public QWidget
 {
@@ -46,11 +48,14 @@ signals:
 public slots:
     void displayHex();
     void refreshDisplay();
+    void showSearchBox();
 
 private slots:
     void selectHexFile();
+    void highlightString();
     void minimize();
     void close();
+    void handleScroll(int i);
 
 private:
     QSize sizeHint() const;
@@ -70,9 +75,14 @@ private:
     QPushButton *mButtonMinimize;
     QPushButton *mButtonClose;
 
+    QWidget *mSearchBar;
+    QLineEdit *mSearchBox,*mSearchResult;
+    QPushButton *mSearchNext, *mSearchPrev, *mSearchClose;
+
     int mXo, mYo;
     QPoint mStartPos;
     bool isMousePressed;
+    bool isSearchBoxShown;
 
     enum RecordType
     {
