@@ -83,6 +83,7 @@ private:
     QPoint mStartPos;
     bool isMousePressed;
     bool isSearchBoxShown;
+    QString mDocumentText;
 
     enum RecordType
     {

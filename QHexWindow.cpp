@@ -589,7 +589,7 @@ void QHexWindow::displayHex()
     mASCIIArea->clear();
     mHexArea->clear();
     mAddressAreaLeft->clear();
-
+    mDocumentText.clear();
     QTextCursor curAddress = mAddressAreaLeft->textCursor();
     QTextCursor curHex = mHexArea->textCursor();
     QTextCursor curASCII = mASCIIArea->textCursor();
@@ -621,11 +621,11 @@ void QHexWindow::displayHex()
                 ASCIILine = ASCIILine + '.';
             }
         }
-
+        mDocumentText.append(ASCIILine);
         HEXLine.remove(0,1);
-        AddressLine.append('\n');
-        HEXLine.append('\n');
-        ASCIILine.append('\n');
+        AddressLine.append(QChar::LineFeed);
+        HEXLine.append(QChar::LineFeed);
+        ASCIILine.append(QChar::LineFeed);
 
         if(flag)
         {
@@ -761,11 +761,9 @@ void QHexWindow::highlightString()
 {
     QString searchString = mSearchBox->text();
     QTextDocument *document = mASCIIArea->document();
-
-    bool found = false;
     int noOfResults=0;
 
-    // undo previous change (if any)
+    // undo previous change (if any) or previous result
     document->undo();
 
     if (searchString.isEmpty())
@@ -785,26 +783,27 @@ void QHexWindow::highlightString()
         colorFormat.setForeground(QBrush(QColor(190, 190, 190)));
         colorFormat.setBackground(QBrush(QColor(190, 10, 100)));
 
-        QString documentText = document->toRawText();
+        int resultPos=0;
 
-        qDebug() << "Text Length Before : " << documentText.length();
-        documentText.remove(QChar('\n'));
-        qDebug() << "Text Length After : " << documentText.length();
-
-        while (!highlightCursor.isNull() && !highlightCursor.atEnd())
-        {
-            highlightCursor = document->find(searchString, highlightCursor);
-
-            if (!highlightCursor.isNull())
+        resultPos = mDocumentText.indexOf(searchString,resultPos,Qt::CaseInsensitive);
+        while(resultPos!=-1)
+        {            
+            highlightCursor.setPosition(resultPos+resultPos/16,QTextCursor::MoveAnchor);
+            if(((resultPos % 16) + searchString.length()) >16)
             {
-                found = true;
-                noOfResults = noOfResults + 1;
-                highlightCursor.movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
-                highlightCursor.mergeCharFormat(colorFormat);
+                highlightCursor.setPosition(resultPos+resultPos/16+searchString.length()+1,QTextCursor::KeepAnchor);
             }
+            else
+            {
+                highlightCursor.setPosition(resultPos+resultPos/16+searchString.length(),QTextCursor::KeepAnchor);
+            }
+            resultPos = resultPos + searchString.length();
+            highlightCursor.mergeCharFormat(colorFormat);
+            resultPos = mDocumentText.indexOf(searchString,resultPos,Qt::CaseInsensitive);
+            noOfResults = noOfResults + 1;
         }
         cursor.endEditBlock();
-        if (found == false)
+        if (noOfResults == 0)
         {
             mSearchResult->setText(tr("Word Not Found"));
         }
