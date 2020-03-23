@@ -84,6 +84,8 @@ private:
     bool isMousePressed;
     bool isSearchBoxShown;
     QString mDocumentText;
+    QTextCharFormat mTextFormat,mTextAlternateFormat;
+    QTextCharFormat mSearchHighlightFormat;
 
     enum RecordType
     {
@@ -140,9 +142,6 @@ private:
     void addError(qint32 LineNumber, ErrorType ErrorInfo);
     void processFile(const QString &Filename);
     void listErrors(void);
-    QTextCharFormat formatAddress;
-    QTextCharFormat formatHex,formatHexAlternate;
-    QTextCharFormat formatASCII;
 };
 
 #endif // Q_DOWNLOAD_WIDGET

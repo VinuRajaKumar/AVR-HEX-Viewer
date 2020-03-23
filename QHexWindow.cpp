@@ -14,162 +14,155 @@ QHexWindow::QHexWindow(QWidget *parent) : QWidget(parent),
     setWindowFlags(Qt::FramelessWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
 
-    this->setStyleSheet(QLatin1String("QWidget{                             \
-        font-family                 : Roboto;                               \
-        font-size                   : 10pt;                                 \
-        font-style                  : normal;                               \
-        font-weight                 : bold;                                 \
-        background-color: rgb(15, 15, 15);                                  \
-    }                                                                       \
-    QLabel{                                                                 \
-        color				: rgb(159, 162, 167);                           \
-        font-weight         : bold;                                         \
-        background-color	: rgb(35,45,54);                                \
-        qproperty-alignment	: AlignMiddle;                                  \
-        padding         	: 0px 0px 0px 0px;                              \
-    }                                                                       \
-    QToolButton{                                                            \
-        color				: rgb(159, 162, 167);                           \
-        font-weight         : bold;                                         \
-        background-color	: rgb(35,45,54);                                \
-        height              : 30px;                                         \
-        padding         	: 0px 0px 0px 0px;                              \
-    }                                                                       \
-    QToolButton:pressed {                                                   \
-          background-color: rgb(0, 176, 156);                               \
-      }                                                                     \
-    QTextEdit{                                                              \
-        background-color            : rgb(16, 29, 37);                      \
-        selection-background-color  : rgb(0, 176, 156);                     \
-        color                       : rgb(0, 176, 156);                     \
-        border                      : 1px solid rgb(35, 45, 54);            \
-        border-radius               : 0px;                                  \
-        padding                     : 10px 10px 10px 10px;                  \
-        margin                      : 0px 0px 0px 0px;                      \
-    }                                                                       \
-    QLineEdit{                                                              \
-    background-color            : rgb(16, 29, 37);                          \
-    selection-background-color  : rgb(0, 176, 156);                         \
-    color                       : rgb(0, 176, 156);                         \
-    border                      : 1px solid rgb(0, 176, 156);                \
-    border-radius               : 0px;                                      \
-    padding                     : 0px 10px 0px 10px;                        \
-    margin                      : 0px 0px 0px 0px;                          \
-}                                                                           \
-    QScrollBar:vertical {                                                   \
-        border: 0px solid grey;                                             \
-        background: rgb(15, 15, 15);                                        \
-        width: 15px;                                                        \
-        margin: 20px 0px 20px 0px;                                          \
-        }                                                                   \
-    QScrollBar::sub-page:vertical {                                         \
-        background: rgb(15, 15, 15);                                        \
-        }                                                                   \
-                                                                            \
-    QScrollBar::add-page:vertical {                                         \
-        background: rgb(15, 15, 15);                                        \
-        }                                                                   \
-    QScrollBar::handle:vertical {                                           \
-        background: rgb(45, 45, 45);                                        \
-        min-height: 20px;                                                   \
-        }                                                                   \
-    QScrollBar::add-line:vertical {                                         \
-        border: 0px solid grey;                                             \
-        background: rgb(25, 25, 25);                                        \
-        height: 20px;                                                       \
-        subcontrol-position: bottom;                                        \
-        subcontrol-origin: margin;                                          \
-        }                                                                   \
-    QScrollBar::sub-line:vertical {                                         \
-        border: 0px solid grey;                                             \
-        background: rgb(25, 25, 25);                                        \
-        height: 20px;                                                       \
-        subcontrol-position: top;                                           \
-        subcontrol-origin: margin;                                          \
-        }                                                                   \
-                                                                            \
-        QScrollBar:vertical {                                               \
-            border: 0px solid grey;                                         \
-            background: #2E2F30;                                            \
-            width: 15px;                                                    \
-            margin: 20px 0 20px 0;                                          \
-        }                                                                   \
-        QScrollBar::handle:vertical {                                       \
-            background: rgb(0, 176, 156);                                   \
-            min-height: 20px;                                               \
-        }                                                                   \
-        QScrollBar::add-line:vertical {                                     \
-            border: 0px solid rgb(0, 176, 156);                             \
-            background: rgb(0, 176, 156);                                   \
-            height: 20px;                                                   \
-            subcontrol-position: bottom;                                    \
-            subcontrol-origin: margin;                                      \
-        }                                                                   \
-                                                                            \
-        QScrollBar::sub-line:vertical {                                     \
-            border: 0px solid rgb(0, 176, 156);                             \
-            background: rgb(0, 176, 156);                                   \
-            height: 20px;                                                   \
-            subcontrol-position: top;                                       \
-            subcontrol-origin: margin;                                      \
-        }                                                                   \
-        QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {    \
-            border: 0px solid rgb(0, 176, 156);                             \
-            width: 11px;                                                    \
-            height: 14px;                                                   \
-            background: #2E2F30;                                            \
-        }                                                                   \
-                                                                            \
-        QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {      \
-            background: none;                                               \
-        }                                                                   \
-                                                                            \
-                                                                            \
-    QPushButton{                                                            \
-        text-align      			: center;                               \
-        color                       : rgb(35,45,54);                        \
-        background-color            : rgb(0, 176, 156);                     \
-        border-radius               : 1px;                                  \
-        margin                      : 0px 0px 0px 0px;                      \
-        padding                     : 0px 0px 0px 0px;                      \
-        border-style                : solid;                                \
-        border                      : 1px solid rgb(0, 176, 156);           \
-        border-radius               : 0px;                                  \
-        width                       : 80px;                                 \
-        height                      : 30px;                                 \
-    }                                                                       \
-    QPushButton:pressed{                                                    \
-        color                       : rgb(0, 176, 156);                     \
-        background-color            : rgb(35,45,54);                        \
-    }                                                                       \
-                                                                            \
-    QPushButton:disabled{                                                   \
-        background-color: rgba(255, 255, 255, 37%);                         \
+    this->setStyleSheet(QLatin1String("                                 \
+    QWidget{                                                            \
+        font-family                 : Roboto;                           \
+        font-size                   : 10pt;                             \
+        font-style                  : normal;                           \
+        font-weight                 : bold;                             \
+        background-color: rgb(15, 15, 15);                              \
+    }                                                                   \
+    QLabel{                                                             \
+        color				: rgb(159, 162, 167);                       \
+        font-weight         : bold;                                     \
+        background-color	: rgb(35,45,54);                            \
+        qproperty-alignment	: AlignMiddle;                              \
+        padding         	: 0px 0px 0px 0px;                          \
+    }                                                                   \
+    QToolButton{                                                        \
+        color				: rgb(159, 162, 167);                       \
+        font-weight         : bold;                                     \
+        background-color	: rgb(35,45,54);                            \
+        height              : 30px;                                     \
+        padding         	: 0px 0px 0px 0px;                          \
+    }                                                                   \
+    QToolButton:pressed {                                               \
+        background-color: rgb(0, 176, 156);                             \
+    }                                                                   \
+    QTextEdit{                                                          \
+        background-color            : rgb(16, 29, 37);                  \
+        selection-background-color  : rgb(0, 176, 156);                 \
+        color                       : rgb(0, 176, 156);                 \
+        border                      : 1px solid rgb(35, 45, 54);        \
+        border-radius               : 0px;                              \
+        padding                     : 10px 10px 10px 10px;              \
+        margin                      : 0px 0px 0px 0px;                  \
+    }                                                                   \
+    QLineEdit{                                                          \
+        background-color            : rgb(16, 29, 37);                  \
+        selection-background-color  : rgb(0, 176, 156);                 \
+        color                       : rgb(0, 176, 156);                 \
+        border                      : 1px solid rgb(0, 176, 156);       \
+        border-radius               : 0px;                              \
+        padding                     : 0px 10px 0px 10px;                \
+        margin                      : 0px 0px 0px 0px;                  \
+    }                                                                   \
+    QScrollBar:vertical {                                               \
+        border: 0px solid grey;                                         \
+        background: rgb(15, 15, 15);                                    \
+        width: 15px;                                                    \
+        margin: 20px 0px 20px 0px;                                      \
+    }                                                                   \
+    QScrollBar::sub-page:vertical {                                     \
+        background: rgb(15, 15, 15);                                    \
+    }                                                                   \
+                                                                        \
+    QScrollBar::add-page:vertical {                                     \
+        background: rgb(15, 15, 15);                                    \
+    }                                                                   \
+    QScrollBar::handle:vertical {                                       \
+        background: rgb(45, 45, 45);                                    \
+        min-height: 20px;                                               \
+    }                                                                   \
+    QScrollBar::add-line:vertical {                                     \
+        border: 0px solid grey;                                         \
+        background: rgb(25, 25, 25);                                    \
+        height: 20px;                                                   \
+        subcontrol-position: bottom;                                    \
+        subcontrol-origin: margin;                                      \
+    }                                                                   \
+    QScrollBar::sub-line:vertical {                                     \
+        border: 0px solid grey;                                         \
+        background: rgb(25, 25, 25);                                    \
+        height: 20px;                                                   \
+        subcontrol-position: top;                                       \
+        subcontrol-origin: margin;                                      \
+    }                                                                   \
+                                                                        \
+    QScrollBar:vertical {                                               \
+        border: 0px solid grey;                                         \
+        background: #2E2F30;                                            \
+        width: 15px;                                                    \
+        margin: 20px 0 20px 0;                                          \
+    }                                                                   \
+    QScrollBar::handle:vertical {                                       \
+        background: rgb(0, 176, 156);                                   \
+        min-height: 20px;                                               \
+    }                                                                   \
+    QScrollBar::add-line:vertical {                                     \
+        border: 0px solid rgb(0, 176, 156);                             \
+        background: rgb(0, 176, 156);                                   \
+        height: 20px;                                                   \
+        subcontrol-position: bottom;                                    \
+        subcontrol-origin: margin;                                      \
+    }                                                                   \
+                                                                        \
+    QScrollBar::sub-line:vertical {                                     \
+        border: 0px solid rgb(0, 176, 156);                             \
+        background: rgb(0, 176, 156);                                   \
+        height: 20px;                                                   \
+        subcontrol-position: top;                                       \
+        subcontrol-origin: margin;                                      \
+    }                                                                   \
+    QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {    \
+        border: 0px solid rgb(0, 176, 156);                             \
+        width: 11px;                                                    \
+        height: 14px;                                                   \
+        background: #2E2F30;                                            \
+    }                                                                   \
+                                                                        \
+    QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {      \
+        background: none;                                               \
+    }                                                                   \
+    QPushButton{                                                        \
+        text-align      			: center;                           \
+        color                       : rgb(35,45,54);                    \
+        background-color            : rgb(0, 176, 156);                 \
+        border-radius               : 1px;                              \
+        margin                      : 0px 0px 0px 0px;                  \
+        padding                     : 0px 0px 0px 0px;                  \
+        border-style                : solid;                            \
+        border                      : 1px solid rgb(0, 176, 156);       \
+        border-radius               : 0px;                              \
+        width                       : 80px;                             \
+        height                      : 30px;                             \
+    }                                                                   \
+    QPushButton:pressed{                                                \
+        color                       : rgb(0, 176, 156);                 \
+        background-color            : rgb(35,45,54);                    \
+    }                                                                   \
+                                                                        \
+    QPushButton:disabled{                                               \
+        background-color: rgba(255, 255, 255, 37%);                     \
     }"));
 
     QFont font("Consolas", 11, QFont::Black, false);
     font.setBold(true);
-    QFontMetrics fontMetrics(font);
 
-    formatAddress.setFont(font);
-    formatAddress.setFontWeight(QFont::Bold);
-    formatAddress.setFontLetterSpacing(140);
-    formatAddress.setForeground(QBrush(QColor(140, 120, 240)));
+    mTextFormat.setFont(font);
+    mTextFormat.setFontWeight(QFont::Bold);
+    mTextFormat.setFontLetterSpacing(110);
+    mTextFormat.setForeground(QBrush(QColor(0, 176, 156)));
 
-    formatHex.setFont(font);
-    formatHex.setFontWeight(QFont::Bold);
-    formatHex.setFontLetterSpacing(110);
-    formatHex.setForeground(QBrush(QColor(0, 176, 156)));
+    mTextAlternateFormat.setFont(font);
+    mTextAlternateFormat.setFontWeight(QFont::Bold);
+    mTextAlternateFormat.setFontLetterSpacing(110);
+    mTextAlternateFormat.setForeground(QBrush(QColor(190, 190, 190)));
 
-    formatHexAlternate.setFont(font);
-    formatHexAlternate.setFontWeight(QFont::Bold);
-    formatHexAlternate.setFontLetterSpacing(110);
-    formatHexAlternate.setForeground(QBrush(QColor(190, 190, 190)));
-
-    formatASCII.setFont(font);
-    formatASCII.setFontWeight(QFont::Bold);
-    formatASCII.setFontLetterSpacing(120);
-    formatASCII.setForeground(QBrush(QColor(200, 200, 200)));
+    mSearchHighlightFormat.setFontWeight(QFont::Bold);
+    mSearchHighlightFormat.setFontLetterSpacing(110);
+    mSearchHighlightFormat.setForeground(QBrush(QColor(190, 190, 190)));
+    mSearchHighlightFormat.setBackground(QBrush(QColor(190, 10, 100)));
 
     mAddressAreaTop = new QTextEdit;
     mAddressAreaTop->setContentsMargins(0, 0, 0, 0);
@@ -316,7 +309,6 @@ QHexWindow::QHexWindow(QWidget *parent) : QWidget(parent),
     mSearchBar->setLayout(h4Layout);
     mSearchBar->hide();
 
-
     QVBoxLayout *v1Layout = new QVBoxLayout;
     v1Layout->setContentsMargins(0,0,0,0);
     v1Layout->setSpacing(0);
@@ -336,24 +328,28 @@ QHexWindow::QHexWindow(QWidget *parent) : QWidget(parent),
     setLayout(finalLayout);
 
     QTextCursor curAddressTop = mAddressAreaTop->textCursor();
-    curAddressTop.insertText("        00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F          ASCII",formatHexAlternate);
+    curAddressTop.insertText("        00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F          ASCII",mTextAlternateFormat);
 
     connect(mButtonMinimize, &QToolButton::clicked, this, &QHexWindow::minimize);
     connect(mButtonClose, &QToolButton::clicked, this, &QHexWindow::close);
     connect(mSearchNext,SIGNAL(clicked()),this,SLOT(highlightString()));
-
     connect(mSelectButton,SIGNAL(clicked()),this,SLOT(selectHexFile()));
     connect(mRefreshButton,SIGNAL(clicked()),this,SLOT(refreshDisplay()));
-
     connect(mRightScrollBar,&QScrollBar::valueChanged,this,&QHexWindow::handleScroll);
     connect(mAddressAreaLeft->verticalScrollBar(),&QScrollBar::valueChanged,this,&QHexWindow::handleScroll);
     connect(mHexArea->verticalScrollBar(),&QScrollBar::valueChanged,this,&QHexWindow::handleScroll);
     connect(mASCIIArea->verticalScrollBar(),&QScrollBar::valueChanged,this,&QHexWindow::handleScroll);
-    QAction *findAction = new QAction(this);
-    findAction->setShortcut(Qt::CTRL|Qt::Key_F);
-    this->addAction(findAction);
-    connect(findAction,SIGNAL(triggered()),this,SLOT(showSearchBox()));
     connect(mSearchClose,SIGNAL(pressed()),this,SLOT(showSearchBox()));
+    connect(mSearchBox,SIGNAL(textChanged(const QString &)),this,SLOT(highlightString()));
+
+    QAction *actionOpen = new QAction(this);
+    actionOpen->setShortcut(Qt::CTRL|Qt::Key_O);
+    this->addAction(actionOpen);
+    QAction *actionFind = new QAction(this);
+    actionFind->setShortcut(Qt::CTRL|Qt::Key_F);
+    this->addAction(actionFind);
+    connect(actionOpen,SIGNAL(triggered()),this,SLOT(selectHexFile()));
+    connect(actionFind,SIGNAL(triggered()),this,SLOT(showSearchBox()));
 }
 
 
@@ -586,13 +582,18 @@ void QHexWindow::displayHex()
     QString HEXLine     = QString("");
     QString ASCIILine   = QString("");
 
-    mASCIIArea->clear();
-    mHexArea->clear();
     mAddressAreaLeft->clear();
+    mHexArea->clear();
     mDocumentText.clear();
+    mASCIIArea->clear();
+
     QTextCursor curAddress = mAddressAreaLeft->textCursor();
     QTextCursor curHex = mHexArea->textCursor();
     QTextCursor curASCII = mASCIIArea->textCursor();
+
+    mAddressAreaLeft->setUndoRedoEnabled(false);
+    mHexArea->setUndoRedoEnabled(false);
+    mASCIIArea->setUndoRedoEnabled(false);
 
     for (int i = startAddress; i < endAddress; i = i + 16)
     {
@@ -629,19 +630,23 @@ void QHexWindow::displayHex()
 
         if(flag)
         {
-            curHex.insertText(HEXLine,formatHex);
-            curASCII.insertText(ASCIILine,formatHex);
-            curAddress.insertText(AddressLine,formatHex);
+            curHex.insertText(HEXLine,mTextFormat);
+            curASCII.insertText(ASCIILine,mTextFormat);
+            curAddress.insertText(AddressLine,mTextFormat);
         }
         else
         {
-            curHex.insertText(HEXLine,formatHexAlternate);
-            curASCII.insertText(ASCIILine,formatHexAlternate);
-            curAddress.insertText(AddressLine,formatHexAlternate);
+            curHex.insertText(HEXLine,mTextAlternateFormat);
+            curASCII.insertText(ASCIILine,mTextAlternateFormat);
+            curAddress.insertText(AddressLine,mTextAlternateFormat);
         }
 
         flag = not flag;
     }
+
+    mAddressAreaLeft->setUndoRedoEnabled(true);
+    mHexArea->setUndoRedoEnabled(true);
+    mASCIIArea->setUndoRedoEnabled(true);
 
     mRefreshButton->show();
     mRightScrollBar->setMaximum(mAddressAreaLeft->verticalScrollBar()->maximum());
@@ -672,11 +677,7 @@ void QHexWindow::paintEvent(QPaintEvent *event)
 
 void QHexWindow::listErrors()
 {
-    if(mFileErrors.size()==0)
-    {
-        qDebug() << Q_FUNC_INFO << "No Errors Found";
-    }
-    else
+    if(mFileErrors.size()!=0)
     {
         qDebug() << "Total Errors : " << mFileErrors.size();
         QMapIterator<qint32,ErrorType> i(mFileErrors);
@@ -738,7 +739,7 @@ void QHexWindow::minimize()
 }
 void QHexWindow::close()
 {
-    QTimer::singleShot(100 /*ms*/, qApp, &QCoreApplication::quit);
+    QTimer::singleShot(0 /*ms*/, qApp, &QCoreApplication::quit);
     //connect(quitButton, SIGNAL(clicked()), &app, SLOT(quit()), Qt::QueuedConnection);
     //QObject::connect(quitButton, &QPushButton::clicked, qApp, &QCoreApplication::quit);
 }
@@ -763,8 +764,7 @@ void QHexWindow::highlightString()
     QTextDocument *document = mASCIIArea->document();
     int noOfResults=0;
 
-    // undo previous change (if any) or previous result
-    document->undo();
+    document->undo();                   // undo previous change (if any) or previous result
 
     if (searchString.isEmpty())
     {
@@ -773,36 +773,26 @@ void QHexWindow::highlightString()
     else
     {
         QTextCursor highlightCursor(document);
-        QTextCursor cursor(document);
+        highlightCursor.beginEditBlock();
 
-        cursor.beginEditBlock();
-        QTextCharFormat plainFormat(highlightCursor.charFormat());
-        QTextCharFormat colorFormat;
-        colorFormat.setFontWeight(QFont::Bold);
-        colorFormat.setFontLetterSpacing(110);
-        colorFormat.setForeground(QBrush(QColor(190, 190, 190)));
-        colorFormat.setBackground(QBrush(QColor(190, 10, 100)));
-
-        int resultPos=0;
-
-        resultPos = mDocumentText.indexOf(searchString,resultPos,Qt::CaseInsensitive);
+        int resultPos = mDocumentText.indexOf(searchString,0,Qt::CaseInsensitive);
+        if(resultPos!=-1)
+        {
+            mRightScrollBar->setValue(mRightScrollBar->maximum()*(resultPos/mDocumentText.length()));
+        }
         while(resultPos!=-1)
         {            
-            highlightCursor.setPosition(resultPos+resultPos/16,QTextCursor::MoveAnchor);
-            if(((resultPos % 16) + searchString.length()) >16)
-            {
-                highlightCursor.setPosition(resultPos+resultPos/16+searchString.length()+1,QTextCursor::KeepAnchor);
-            }
-            else
-            {
-                highlightCursor.setPosition(resultPos+resultPos/16+searchString.length(),QTextCursor::KeepAnchor);
-            }
+            int startHighlightPos = resultPos+resultPos/16;
+            int endHighlightPos = startHighlightPos + searchString.length() + ((resultPos % 16) + searchString.length())/16;
+            highlightCursor.setPosition(startHighlightPos,QTextCursor::MoveAnchor);
+            highlightCursor.setPosition(endHighlightPos,QTextCursor::KeepAnchor);
+            highlightCursor.mergeCharFormat(mSearchHighlightFormat);
             resultPos = resultPos + searchString.length();
-            highlightCursor.mergeCharFormat(colorFormat);
             resultPos = mDocumentText.indexOf(searchString,resultPos,Qt::CaseInsensitive);
             noOfResults = noOfResults + 1;
         }
-        cursor.endEditBlock();
+        highlightCursor.endEditBlock();
+
         if (noOfResults == 0)
         {
             mSearchResult->setText(tr("Word Not Found"));
